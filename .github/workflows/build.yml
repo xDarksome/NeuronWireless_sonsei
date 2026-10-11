@@ -2,8 +2,7 @@ name: Build firmware
 
 on:
   push:
-  pull_request:
-  workflow_dispatch:
+    branches: ["**"]
 
 env:
   GCC_ARM_VERSION: 10.3-2021.10
@@ -15,12 +14,8 @@ env:
 
 jobs:
   build:
-    name: Build (${{ matrix.mode }})
+    name: Build (release)
     runs-on: ubuntu-24.04
-    strategy:
-      fail-fast: false
-      matrix:
-        mode: [release, debug]
 
     steps:
       - name: Checkout
@@ -38,7 +33,7 @@ jobs:
           python-version: "3.11"
 
       - name: Install Python dependencies
-        run: pip install intelhex
+        run: pip install intelhex numpy
 
       - name: Cache toolchain and SDK
         id: cache-deps
@@ -68,15 +63,17 @@ jobs:
         working-directory: build
         run: |
           arm-none-eabi-gcc --version | head -1
-          make ${{ matrix.mode }} -j"$(nproc)"
+          make release -j"$(nproc)"
 
       - name: Upload firmware
         uses: actions/upload-artifact@v4
         with:
-          name: NeuronWireless_sonsei-${{ matrix.mode }}-${{ github.sha }}
+          name: NeuronWireless_sonsei-${{ github.sha }}
           path: |
-            build/${{ matrix.mode }}/*.bin
-            build/${{ matrix.mode }}/*.hex
-            build/${{ matrix.mode }}/*.elf
-            build/${{ matrix.mode }}/*.map
+            build/release/NeuronWireless_sonsei_sealed.bin
+            build/release/NeuronWireless_sonsei_sealed.hex
+            build/release/NeuronWireless_sonsei.bin
+            build/release/NeuronWireless_sonsei.hex
+            build/release/NeuronWireless_sonsei.elf
+            build/release/NeuronWireless_sonsei.map
           if-no-files-found: error
