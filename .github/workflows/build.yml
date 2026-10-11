@@ -1,0 +1,79 @@
+name: Build firmware
+
+on:
+  push:
+    branches: ["**"]
+
+env:
+  GCC_ARM_VERSION: 10.3-2021.10
+  GCC_ARM_URL: https://developer.arm.com/-/media/Files/downloads/gnu-rm/10.3-2021.10/gcc-arm-none-eabi-10.3-2021.10-x86_64-linux.tar.bz2
+  GCC_ARM_SHA256: 97dbb4f019ad1650b732faffcc881689cedc14e2b7ee863d390e0a41ef16c9a3
+  NRF5_SDK: nRF5_SDK_17.1.0_ddde560
+  NRF5_SDK_URL: https://nsscprodmedia.blob.core.windows.net/prod/software-and-other-downloads/sdks/nrf5/binaries/nrf5_sdk_17.1.0_ddde560.zip
+  NRF5_SDK_SHA256: 5bfe38e744c39fd7f30e10077ba12df306ef91f368894795d6a3e7a62dc68061
+
+jobs:
+  build:
+    name: Build (release)
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # .gitmodules uses SSH URLs; rewrite them to HTTPS so no deploy key is needed.
+      - name: Checkout submodules
+        run: |
+          git config --global url."https://github.com/".insteadOf "git@github.com:"
+          git submodule update --init --recursive --jobs 8
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Python dependencies
+        run: pip install intelhex numpy
+
+      - name: Cache toolchain and SDK
+        id: cache-deps
+        uses: actions/cache@v4
+        with:
+          path: ~/deps
+          key: deps-gcc-arm-${{ env.GCC_ARM_VERSION }}-${{ env.NRF5_SDK }}
+
+      - name: Download toolchain and SDK
+        if: steps.cache-deps.outputs.cache-hit != 'true'
+        run: |
+          mkdir -p ~/deps && cd ~/deps
+          curl -fsSL --retry 3 -o gcc-arm.tar.bz2 "$GCC_ARM_URL"
+          echo "$GCC_ARM_SHA256  gcc-arm.tar.bz2" | sha256sum -c -
+          tar xjf gcc-arm.tar.bz2 && rm gcc-arm.tar.bz2
+          curl -fsSL --retry 3 -o sdk.zip "$NRF5_SDK_URL"
+          echo "$NRF5_SDK_SHA256  sdk.zip" | sha256sum -c -
+          unzip -q sdk.zip -d sdk && rm sdk.zip
+
+      - name: Set up toolchain and SDK
+        run: |
+          echo "$HOME/deps/gcc-arm-none-eabi-$GCC_ARM_VERSION/bin" >> "$GITHUB_PATH"
+          mkdir -p libraries/SDK
+          ln -sfn "$HOME/deps/sdk/$NRF5_SDK" "libraries/SDK/$NRF5_SDK"
+
+      - name: Build
+        working-directory: build
+        run: |
+          arm-none-eabi-gcc --version | head -1
+          make release -j"$(nproc)"
+
+      - name: Upload firmware
+        uses: actions/upload-artifact@v4
+        with:
+          name: NeuronWireless_sonsei-${{ github.sha }}
+          path: |
+            build/release/NeuronWireless_sonsei_sealed.bin
+            build/release/NeuronWireless_sonsei_sealed.hex
+            build/release/NeuronWireless_sonsei.bin
+            build/release/NeuronWireless_sonsei.hex
+            build/release/NeuronWireless_sonsei.elf
+            build/release/NeuronWireless_sonsei.map
+          if-no-files-found: error
