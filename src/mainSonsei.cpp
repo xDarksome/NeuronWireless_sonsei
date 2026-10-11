@@ -91,6 +91,7 @@ extern "C"
 #include "configuration.h"
 #include "DynamicMacrosDygma.h"
 #include "OverlayProcessing.h"
+#include "QukeysDygma.h"
 #include "LEDDevice-Remote.h"
 #include "LEDManager.h"
 #include "LEDPaletteRGB.h"
@@ -391,6 +392,15 @@ void setup(void)
 
     //SuperkeysHandler.setup(); // Initialize the SuperkeysHandler plugin.
     keyRoleManager.setup_superkeys();   // Initialize the keyRoleManager plugin.
+
+    // Speculative hold: apply a mod-tap's Control, Alt or Shift right away
+    // while it is undecided (e.g. for Ctrl+click), withdrawing it on a tap.
+    qukeys.setSpeculativeHoldMods( kaleidoscope::plugin::Qukeys::mod_left_control |
+                                   kaleidoscope::plugin::Qukeys::mod_right_control |
+                                   kaleidoscope::plugin::Qukeys::mod_left_alt |
+                                   kaleidoscope::plugin::Qukeys::mod_right_alt |
+                                   kaleidoscope::plugin::Qukeys::mod_left_shift |
+                                   kaleidoscope::plugin::Qukeys::mod_right_shift );
     DynamicMacros.reserve_storage();
 
     // Keep the HID begin after the Kaleidoscope setup.
