@@ -495,6 +495,13 @@ else
     DEFINES += -DSONSEI_FW_VERSION=\"v1.0.2-alpha\"			# Fixed "alpha" value to recognize local builds
 endif
 
+# Alternative mouse speed keys (keycodes 0x5081 up, 0x5082 down, 0x5084 left,
+# 0x5088 right, plus diagonals): speed, acceleration and speed limit, separate
+# from the primary mouse.* settings.
+DEFINES += -DMOUSEKEYS_ALTERNATIVE_SPEED=1
+DEFINES += -DMOUSEKEYS_ALTERNATIVE_ACCEL_SPEED=1
+DEFINES += -DMOUSEKEYS_ALTERNATIVE_SPEED_LIMIT=127
+
 DEFINES += -DBOARD_VENDORID=0x35EF
 DEFINES += -DBOARD_MANUFACTURER=\"DYGMA\"
 
