@@ -498,9 +498,14 @@ endif
 # Alternative mouse speed keys (keycodes 0x5081 up, 0x5082 down, 0x5084 left,
 # 0x5088 right, plus diagonals): speed, acceleration and speed limit, separate
 # from the primary mouse.* settings.
-DEFINES += -DMOUSEKEYS_ALTERNATIVE_SPEED=100
+DEFINES += -DMOUSEKEYS_ALTERNATIVE_SPEED=60
 DEFINES += -DMOUSEKEYS_ALTERNATIVE_ACCEL_SPEED=0
 DEFINES += -DMOUSEKEYS_ALTERNATIVE_SPEED_LIMIT=100
+
+# Mouse speed multipliers applied while Shift is held, for the primary and the
+# alternative mouse speed keys. They scale both the speed and the speed limit.
+DEFINES += -DMOUSEKEYS_SHIFT_MULTIPLIER=0.5
+DEFINES += -DMOUSEKEYS_ALTERNATIVE_SHIFT_MULTIPLIER=2.0
 
 DEFINES += -DBOARD_VENDORID=0x35EF
 DEFINES += -DBOARD_MANUFACTURER=\"DYGMA\"
