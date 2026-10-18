@@ -507,8 +507,8 @@ DEFINES += -DMOUSEKEYS_ALTERNATIVE_SPEED_LIMIT=100
 DEFINES += -DMOUSEKEYS_SHIFT_MULTIPLIER=0.5
 DEFINES += -DMOUSEKEYS_ALTERNATIVE_SHIFT_MULTIPLIER=3.0
 
-# Hold-on-other-key-press (like QMK's HOLD_ON_OTHER_KEY_PRESS) for qukeys:
-# 1 = layer-taps, 2 = mod-taps, 3 = both, 0 = off.
+# Hold-on-other-key-press (like QMK's HOLD_ON_OTHER_KEY_PRESS) for qukeys and
+# superkeys: 1 = layer shift holds, 2 = modifier holds, 3 = both, 0 = off.
 DEFINES += -DQUKEYS_HOLD_ON_OTHER_KEY_PRESS=3
 
 DEFINES += -DBOARD_VENDORID=0x35EF
