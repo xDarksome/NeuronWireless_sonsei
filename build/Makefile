@@ -511,6 +511,11 @@ DEFINES += -DMOUSEKEYS_ALTERNATIVE_SHIFT_MULTIPLIER=3.0
 # superkeys: 1 = layer shift holds, 2 = modifier holds, 3 = both, 0 = off.
 DEFINES += -DQUKEYS_HOLD_ON_OTHER_KEY_PRESS=3
 
+# Quick tap (like QMK's QUICK_TAP_TERM) for qukeys: pressing a qukey again
+# within this many milliseconds after tapping it repeats the tap key when held.
+# 0 = off.
+DEFINES += -DQUKEYS_QUICK_TAP_TERM=200
+
 DEFINES += -DBOARD_VENDORID=0x35EF
 DEFINES += -DBOARD_MANUFACTURER=\"DYGMA\"
 
