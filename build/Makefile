@@ -502,8 +502,15 @@ DEFINES += -DMOUSEKEYS_ALTERNATIVE_SPEED=30
 DEFINES += -DMOUSEKEYS_ALTERNATIVE_ACCEL_SPEED=0
 DEFINES += -DMOUSEKEYS_ALTERNATIVE_SPEED_LIMIT=100
 
+# Alternative wheel keys (keycodes 0x5091 up, 0x5092 down, 0x5094 left,
+# 0x5098 right): scroll speed and delay (ms), separate from the primary
+# mouse.wheel* settings.
+DEFINES += -DMOUSEKEYS_ALTERNATIVE_WHEEL_SPEED=1
+DEFINES += -DMOUSEKEYS_ALTERNATIVE_WHEEL_DELAY=50
+
 # Mouse speed multipliers applied while Shift is held, for the primary and the
-# alternative mouse speed keys. They scale both the speed and the speed limit.
+# alternative mouse speed keys. They scale both the speed and the speed limit,
+# and the scroll speed of the primary and alternative wheel keys.
 DEFINES += -DMOUSEKEYS_SHIFT_MULTIPLIER=0.5
 DEFINES += -DMOUSEKEYS_ALTERNATIVE_SHIFT_MULTIPLIER=3.0
 
