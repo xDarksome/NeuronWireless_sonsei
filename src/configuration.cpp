@@ -52,6 +52,9 @@ typedef struct PACK __attribute__((aligned(4)))
 
 } config_cache_t;
 
+// The EEPROM class stores the configuration in 2 flash pages of 4 KB.
+static_assert( sizeof( config_cache_t ) <= 2 * 4096, "Configuration does not fit in the EEPROM flash pages" );
+
 static config_cache_t config_cache;
 
 static result_t _cfg_item_request_cb( ConfigManager::cfg_item_type_t item_type, const void ** pp_item )

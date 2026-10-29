@@ -65,7 +65,7 @@
 //    27, 28, 29, 30, 31, 32, 33, 34, 34 + key_matrix_leds, 33 + key_matrix_leds, 32 + key_matrix_leds, 31 + key_matrix_leds, 30 + key_matrix_leds, 29 + key_matrix_leds, 28 + key_matrix_leds, 27 + key_matrix_leds}
 
 // Layers definition
-#define APP_LAYERS_CNT    10
+#define APP_LAYERS_CNT    16
 
 // Macros definition
 #define APP_MACROS_MEMORY_SIZE  2048
